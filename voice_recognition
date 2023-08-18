@@ -1,0 +1,46 @@
+//Python code for voice recognition
+
+import speech_recognition as sr
+import serial
+import time
+
+def main():
+    r = sr.Recognizer()
+    with sr.Microphone() as source:
+        r.adjust_for_ambient_noise(source)
+        print("Please say Something")
+        audio = r.listen(source)
+        print("Recognizing Now...")
+
+    # recognize speech using google
+    try:
+        print("You have said \n"+ r.recognize_google(audio))
+    
+    except Exception as e:
+        print("Say something?: " + str(e))
+        return 'empty'
+    
+    return r.recognize_google(audio)
+
+    if __name__ == "__main__":
+        print("Start")
+        port = "COM9"
+        bluetooth = serial.Serial(port,9600)
+        print("Connected")
+        bluetooth.flushInput()
+    
+    while true:
+        x = main().strip()
+        y = x
+        x = bytes(x, 'utf-8')
+
+        if y == 'Hello' or y == 'hello':
+            break
+
+        bluetooth.write(b""+x)
+        input_data = bluetooth.readline()
+        print(input_data.decode('utf-8'))
+        time.sleep(0.1)
+
+        bluetooth.close()
+        print("Done")
